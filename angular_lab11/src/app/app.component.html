@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<div style="text-align:center">
+    <a routerLink="/productos">Productos</a> -
+    <a routerLink="/acercade">Acerca de ...</a>
+    <div style="border: 1px solid red">
+        <router-outlet></router-outlet>
+    </div>
+</div>
+
+<div>
+    <h1>Administración de artículos</h1>
+    <table class="table" border="1" *ngIf="hayRegistros(); else sinproductos">
+        <thead>
+            <tr>
+                <td scope="col">Codigo</td>
+                <td scope="col">Nombre</td>
+                <td scope="col">Precio</td>
+                <td scope="col">Imagen</td>
+                <td scope="col">Borrar</td>
+                <td scope="col">Seleccionar</td>
+            </tr>
+        </thead>
+        <tr *ngFor="let producto of lista">
+            <td>{{producto.codigo}}</td>
+            <td>{{producto.descripcion}}</td>
+            <td>{{producto.precio}}</td>
+            <td><img src="http://localhost:3000/images/{{producto.imagen}}" alt="{{producto.imagen}}" width="250px" height="150px"></td>
+            <td><button (click)="eliminar(producto.codigo)">Borrar?</button></td>
+            <td><button (click)="mostrar(producto.codigo)">Seleccionar</button></td>
+        </tr>
+    </table>
+    <ng-template #sinproductos>
+        <p>No hay productos</p>
+    </ng-template>
+    <div class="form-group">
+        <form method="post" enctype="multipart/form-data" action="/productos">
+            <div class="text-center">
+                <h1>Datos</h1>
+                <p>
+                    <label>Descripcion</label>
+                    <br/>
+                    <input class="col-sm-2 col-form-label col-form-label-sm" type="text" name="descripcion" [(ngModel)]="prod.descripcion" />
+                </p>
+                <p>
+                    <label>Precio</label>
+                    <br/>
+                    <input class="col-sm-2 col-form-label col-form-label-sm" type="number" name="precio" [(ngModel)]="prod.precio" />
+                </p>
+                <p>
+                    <label>Imagen</label>
+                    <br/>
+                    <input class="col-sm-2 col-form-label col-form-label-sm" type="file" (change)="fileChange($event)" name="imagen" [(ngModel)]="prod.imagen" />
+                </p>
+                <p><button (click)="nuevo()" class="btn alert alert-primary">Agregar</button>
+                    <button (click)="actualizar()" class="btn alert alert-primary">Modificar</button></p>
+            </div>
+        </form>
+    </div>
+
+
+    <router-outlet></router-outlet>
